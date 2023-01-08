@@ -1,10 +1,11 @@
-import random
+import time
 import matplotlib.pyplot as plt
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import load_digits
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
+start_time = time.perf_counter()
 
 
 # Load the digits dataset
@@ -19,7 +20,10 @@ mlp = MLPClassifier(hidden_layer_sizes=(50,), max_iter=10, alpha=1e-4,
                     learning_rate_init=1e-3)
 # Train the model on the training data
 mlp.fit(X_train, y_train)
+end_time = time.perf_counter()
 
+run_time = end_time - start_time
+print(f"Runtime: {run_time:.4f} seconds")
 
 # Test the model on the test data
 accuracy = mlp.score(X_test, y_test)
