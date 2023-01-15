@@ -2,22 +2,21 @@ import time
 
 import matplotlib.pyplot as plt
 from sklearn import metrics
-from sklearn.datasets import load_digits
+from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 
 start_time = time.perf_counter()
 
 # Load the digits dataset
-digits = load_digits()
-
-# Split the data into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(digits.data, digits.target)
-
-# Create the MLPClassifier
-mlp = MLPClassifier(hidden_layer_sizes=(50,), max_iter=100, alpha=1e-4,
+digits = datasets.load_digits()
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
+X_train, X_test, y_train, y_test = train_test_split(
+    data, digits.target, test_size=0.5, shuffle=False)
+mlp = MLPClassifier(hidden_layer_sizes=(50,), max_iter=50, alpha=1e-4,
                     solver='lbfgs',  tol=1e-4, random_state=1,
-                    learning_rate_init=1e-3)
+                    learning_rate_init=1e-3, verbose=True)
 # Train the model on the training data
 mlp.fit(X_train, y_train)
 end_time = time.perf_counter()
@@ -44,5 +43,8 @@ print(
     f"Classification report for classifier {mlp}:\n"
     f"{metrics.classification_report(y_test, predicted)}\n"
 )
+disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+disp.figure_.suptitle("Confusion Matrix")
+print(f"Confusion matrix:\n{disp.confusion_matrix}")
 
 plt.show()

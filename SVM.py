@@ -11,7 +11,7 @@ start_time = time.perf_counter()
 digits = datasets.load_digits()
 n_samples = len(digits.images)
 data = digits.images.reshape((n_samples, -1))
-clf = svm.SVC(gamma=0.001, C=1)
+clf = svm.SVC(gamma=0.001, C=1, kernel='rbf')
 X_train, X_test, y_train, y_test = train_test_split(
     data, digits.target, test_size=0.5, shuffle=False)
 
@@ -34,5 +34,9 @@ print(
     f"Classification report for classifier {clf}:\n"
     f"{metrics.classification_report(y_test, predicted)}\n"
 )
+disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+disp.figure_.suptitle("Confusion Matrix")
+print(f"Confusion matrix:\n{disp.confusion_matrix}")
+
 
 plt.show()
