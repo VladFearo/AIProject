@@ -24,6 +24,7 @@ end_time = time.perf_counter()
 
 run_time = end_time - start_time
 print(f"Runtime: {run_time*1000:.2f} ms")
+# Test the model on the test data
 accuracy = clf.score(X_test, y_test)
 print("Test set accuracy: {:.2f}".format(accuracy))
 predicted = clf.predict(X_test)
